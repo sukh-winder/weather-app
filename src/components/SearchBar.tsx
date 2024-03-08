@@ -28,6 +28,7 @@ import Card4 from "./Card4";
 import { useWeather } from "../store/weatherStore";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { alert } from "../utils/Toast";
 
 const initialState = {
   base: "",
@@ -172,7 +173,12 @@ export default function SearchBar() {
           right={
             <TextInput.Icon
               icon="magnify"
-              onPress={() => handleSearchedCity(searchedCity)}
+              onPress={() => {
+                if (searchedCity.length > 1) {
+                  handleSearchedCity(searchedCity);
+                }
+                alert("warning", "Warning", "enter a valid city name");
+              }}
             />
           }
         />

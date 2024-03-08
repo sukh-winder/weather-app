@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import { alert } from "./Toast";
 
 const API_URL = "https://api.openweathermap.org/data/2.5/weather?";
@@ -12,7 +13,9 @@ export async function getWeatherByCity(city: string) {
     let weatherData = await data.json();
 
     if (weatherData?.cod !== 200) {
+      Alert.alert("error", weatherData?.message as string);
       alert("error", "Error", weatherData?.message as string);
+      return;
     }
 
     return weatherData;
@@ -30,7 +33,9 @@ export async function getWeatherByLatAndLong(lat: number, lon: number) {
     const weatherData = await data.json();
 
     if (weatherData.cod !== 200) {
+      Alert.alert("error", weatherData?.message as string);
       alert("error", "Error", weatherData?.message as string);
+      return;
     }
 
     return weatherData;
