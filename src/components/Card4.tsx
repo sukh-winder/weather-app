@@ -80,7 +80,8 @@ export default function Card4({
               {
                 <Icon
                   name={
-                    weatherDetails?.sys?.sunrise <= getCurrentUnixTimestamp()
+                    weatherDetails?.sys?.sunrise <= getCurrentUnixTimestamp() &&
+                    getCurrentUnixTimestamp() < weatherDetails?.sys?.sunrise
                       ? "weather-sunny"
                       : "weather-night"
                   }
@@ -99,7 +100,8 @@ export default function Card4({
               top: hp(0.5),
             }}
           >
-            {weatherDetails?.sys?.sunrise <= getCurrentUnixTimestamp() && (
+            {weatherDetails?.sys?.sunrise <= getCurrentUnixTimestamp() &&
+            getCurrentUnixTimestamp() < weatherDetails?.sys?.sunrise ? (
               <>
                 <Text
                   style={[
@@ -122,31 +124,32 @@ export default function Card4({
                   {convertUnixTimestampToAMPM(weatherDetails?.sys.sunrise)}
                 </Text>
               </>
-            )}
-
-            {weatherDetails?.sys?.sunset <= getCurrentUnixTimestamp() && (
-              <>
-                <Text
-                  style={[
-                    style.tempMax,
-                    {
-                      fontSize: 16,
-                    },
-                  ]}
-                >
-                  Sunset:
-                </Text>
-                <Text
-                  style={[
-                    style.tempMax,
-                    {
-                      fontSize: 16,
-                    },
-                  ]}
-                >
-                  {convertUnixTimestampToAMPM(weatherDetails?.sys.sunset)}
-                </Text>
-              </>
+            ) : (
+              weatherDetails?.sys?.sunset <= getCurrentUnixTimestamp() &&
+              getCurrentUnixTimestamp() > weatherDetails?.sys?.sunrise && (
+                <>
+                  <Text
+                    style={[
+                      style.tempMax,
+                      {
+                        fontSize: 16,
+                      },
+                    ]}
+                  >
+                    Sunset:
+                  </Text>
+                  <Text
+                    style={[
+                      style.tempMax,
+                      {
+                        fontSize: 16,
+                      },
+                    ]}
+                  >
+                    {convertUnixTimestampToAMPM(weatherDetails?.sys.sunset)}
+                  </Text>
+                </>
+              )
             )}
           </View>
         </View>

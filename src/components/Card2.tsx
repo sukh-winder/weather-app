@@ -102,7 +102,7 @@ export default function Card2({
                 },
               ]}
             >
-              Gust:
+              {weatherDetails?.wind?.gust ? "Gust:" : "Wind:"}
             </Text>
             <Text
               style={[
@@ -112,7 +112,10 @@ export default function Card2({
                 },
               ]}
             >
-              {mphToKmph(weatherDetails?.wind?.gust)}km/h
+              {weatherDetails?.wind?.gust
+                ? mphToKmph(weatherDetails?.wind?.gust)
+                : weatherDetails?.wind.speed}
+              km/h
             </Text>
 
             <Icon

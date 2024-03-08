@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   ImageBackground,
   Keyboard,
   StatusBar,
@@ -177,7 +178,7 @@ export default function SearchBar() {
                 if (searchedCity.length > 1) {
                   handleSearchedCity(searchedCity);
                 }
-                alert("warning", "Warning", "enter a valid city name");
+                Alert.alert("warning", "enter a valid city name");
               }}
             />
           }

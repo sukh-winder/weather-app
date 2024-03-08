@@ -4,8 +4,8 @@ export function fahrenheitToCelsius(temp: number): string {
   return celsius;
 }
 
-export function mphToKmph(mph: number): string {
-  const kmph = (mph * 1.60934).toFixed(2);
+export function mphToKmph(mph: number) {
+  const kmph = Number(mph * 1.60934).toFixed(2);
 
-  return kmph;
+  return Number(kmph);
 }
