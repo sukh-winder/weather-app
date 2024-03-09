@@ -177,8 +177,9 @@ export default function SearchBar() {
               onPress={() => {
                 if (searchedCity.length > 1) {
                   handleSearchedCity(searchedCity);
+                } else {
+                  Alert.alert("warning", "enter a valid city name");
                 }
-                Alert.alert("warning", "enter a valid city name");
               }}
             />
           }
