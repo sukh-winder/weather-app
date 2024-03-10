@@ -10,6 +10,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { convertUnixTimestampToDate } from "../utils/timeAnddate";
+import { BlurView } from "expo-blur";
 export default function Card3({
   weatherDetails,
 }: {
@@ -20,7 +21,8 @@ export default function Card3({
   const style = StyleSheet.create({
     card: {
       elevation: 4,
-      backgroundColor: theme.colors.scrim,
+      shadowColor: "transparent",
+      // backgroundColor: theme.colors.scrim,
       width: wp(40),
       borderRadius: wp(2),
       display: "flex",
@@ -47,86 +49,91 @@ export default function Card3({
   });
   return (
     weatherDetails && (
-      <View style={style.card}>
-        <View style={{ gap: hp(0.5) }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "auto",
-              gap: wp(4),
-            }}
-          >
+      <BlurView style={{ borderRadius: wp(2), overflow: "hidden" }}>
+        <View style={style.card}>
+          <View style={{ gap: hp(0.5) }}>
             <View
-              style={{ alignItems: "flex-start", justifyContent: "flex-start" }}
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "auto",
+                gap: wp(4),
+              }}
             >
-              <Text style={style.tempMax}>Feels like</Text>
-              <View style={style.tempContainer}>
-                <Text style={style.tempMax}>
-                  {fahrenheitToCelsius(weatherDetails?.main?.temp_max)}℃
-                </Text>
+              <View
+                style={{
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <Text style={style.tempMax}>Feels like</Text>
+                <View style={style.tempContainer}>
+                  <Text style={style.tempMax}>
+                    {fahrenheitToCelsius(weatherDetails?.main?.temp_max)}℃
+                  </Text>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  marginTop: hp(2),
+                }}
+              >
+                <Text style={style.tempMin}>Humidity</Text>
+
+                <View
+                  style={[style.tempContainer, { justifyContent: "flex-end" }]}
+                >
+                  <Text style={style.tempMin}>
+                    {weatherDetails?.main?.humidity}%
+                  </Text>
+                </View>
               </View>
             </View>
 
             <View
               style={{
-                marginTop: hp(2),
+                flexDirection: "row",
+                alignItems: "center",
+                gap: wp(1),
+                top: hp(0.5),
               }}
             >
-              <Text style={style.tempMin}>Humidity</Text>
-
-              <View
-                style={[style.tempContainer, { justifyContent: "flex-end" }]}
+              <Text
+                style={[
+                  style.tempMax,
+                  {
+                    fontSize: 16,
+                  },
+                ]}
               >
-                <Text style={style.tempMin}>
-                  {weatherDetails?.main?.humidity}%
-                </Text>
-              </View>
-            </View>
-          </View>
+                Date:
+              </Text>
+              <Text
+                style={[
+                  style.tempMax,
+                  {
+                    fontSize: 16,
+                  },
+                ]}
+              >
+                {convertUnixTimestampToDate(weatherDetails?.dt)}
+              </Text>
 
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: wp(1),
-              top: hp(0.5),
-            }}
-          >
-            <Text
-              style={[
-                style.tempMax,
-                {
-                  fontSize: 16,
-                },
-              ]}
-            >
-              Date:
-            </Text>
-            <Text
-              style={[
-                style.tempMax,
-                {
-                  fontSize: 16,
-                },
-              ]}
-            >
-              {convertUnixTimestampToDate(weatherDetails?.dt)}
-            </Text>
-
-            {/* <Icon
+              {/* <Icon
             name="weather-windy-variant"
             color={theme.colors.background}
             size={28}
           /> */}
+            </View>
           </View>
-        </View>
-        {/* <Icon
+          {/* <Icon
         name={weatherIcon(weatherDetails?.weather[0]?.main)}
         color={theme.colors.background}
         size={34}
       /> */}
-      </View>
+        </View>
+      </BlurView>
     )
   );
 }

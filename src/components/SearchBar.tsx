@@ -30,6 +30,10 @@ import { useWeather } from "../store/weatherStore";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { alert } from "../utils/Toast";
+import LottieView from "lottie-react-native";
+import { getBackgroundAnimation } from "../utils/icon";
+import sunny from "../../assets/sunny.json";
+// import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const initialState = {
   base: "",
@@ -105,14 +109,23 @@ export default function SearchBar() {
     [searchedCity]
   );
 
+  function handleCurrentCity() {
+    getLocation(Location, setWeatherDetails, setWeather);
+  }
+
   useEffect(() => {
     getLocation(Location, setWeatherDetails, setWeather);
   }, [Location]);
 
+  console.log(
+    "weatherDetails?.weather[0]?.main",
+    weatherDetails?.weather[0]?.main
+  );
+
   const style = StyleSheet.create({
     safeAreaView: {
       // flex: 1,
-      marginTop: StatusBar.currentHeight,
+      // marginTop: StatusBar.currentHeight,
       // backgroundColor: theme.colors.onBackground,
       // alignItems: "center",
     },
@@ -139,7 +152,6 @@ export default function SearchBar() {
 
     currentLocation: { color: theme.colors.background, textAlign: "center" },
   });
-
   return (
     <SafeAreaView style={style.safeAreaView}>
       <LinearGradient
@@ -156,84 +168,201 @@ export default function SearchBar() {
           paddingHorizontal: wp(2),
         }}
       >
-        <View style={style.headerContainer}>
-          <Text variant="titleLarge" style={style.headDesc}>
-            Pick a location
-          </Text>
-          <Text variant="labelSmall" style={style.headDesc}>
-            Find the area or the city you want to know the detailed weather info
-            at this time
-          </Text>
-        </View>
-
-        <TextInput
-          mode="outlined"
-          value={searchedCity}
-          onChangeText={(text) => setSearchedCity(text)}
-          style={style.cityInput}
-          right={
-            <TextInput.Icon
-              icon="magnify"
-              onPress={() => {
-                if (searchedCity.length > 1) {
-                  handleSearchedCity(searchedCity);
-                } else {
-                  Alert.alert("warning", "enter a valid city name");
-                }
-              }}
-            />
+        <LottieView
+          source={
+            weatherDetails?.weather[0]?.main
+              ? getBackgroundAnimation(weatherDetails)
+              : sunny
           }
+          autoPlay
+          loop
+          style={{
+            width: wp(100),
+            height: hp(100),
+            position: "absolute",
+            zIndex: 1,
+            top: hp(28),
+          }}
         />
+        <View
+          style={{
+            width: wp(100),
+            height: hp(100),
+            position: "absolute",
+            zIndex: 2,
+          }}
+        >
+          {/* <LinearGradient
+          colors={[theme.colors.onPrimary, theme.colors.primary]}
+          // start={{ x: 0, y: 0.9 }}
+          // end={{ x: 0.9, y: 0.5 }}
+          start={{ x: 0.9, y: 0.1 }}
+          end={{ x: 0, y: 1 }}
+          style={{
+            width: wp(100),
+            height: hp(100),
+            paddingVertical: hp(1),
+            paddingBottom: hp(3),
+            paddingHorizontal: wp(2),
+          }}
+        > */}
+          <View style={style.headerContainer}>
+            <Text variant="titleLarge" style={style.headDesc}>
+              Pick a location
+            </Text>
+            <Text variant="labelSmall" style={style.headDesc}>
+              Find the area or the city you want to know the detailed weather
+              info at this time
+            </Text>
+          </View>
 
-        {loading ? (
-          <ActivityIndicator />
-        ) : (
-          <View
-            style={{
-              height: wp(100),
-              justifyContent: "center",
-              alignItems: "center",
+          <TextInput
+            mode="outlined"
+            placeholder="Search city"
+            value={searchedCity}
+            onChangeText={(text) => setSearchedCity(text)}
+            style={style.cityInput}
+            right={
+              <TextInput.Icon
+                icon="magnify"
+                onPress={() => {
+                  if (searchedCity.length > 1) {
+                    handleSearchedCity(searchedCity);
+                  } else {
+                    Alert.alert("warning", "enter a valid city name");
+                  }
+                }}
+              />
+            }
+          />
+
+          {/* <GooglePlacesAutocomplete
+            placeholder="Search"
+            onPress={(data, details = null) => {
+              // 'details' is provided when fetchDetails = true
+              console.log(data, details);
             }}
-          >
-            <View style={style.contentContainer}>
-              <TouchableOpacity
-                onPress={() => router.push("/weather")}
+            query={{
+              key: "",
+              language: "en",
+            }}
+            styles={{
+              container: {
+                width: wp(80),
+                alignItems: "center",
+                left: wp(8),
+                // justifyContent: "center",
+              },
+            }}
+          /> */}
+
+          {loading ? (
+            <ActivityIndicator />
+          ) : !weatherDetails?.name ? (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                gap: hp(2),
+                marginVertical: hp(4),
+              }}
+            >
+              <Text
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: wp(4),
+                  textAlign: "center",
+                  width: wp(80),
+                  fontWeight: "600",
+                  fontSize: 16,
                 }}
               >
-                <Text variant="titleMedium" style={style.currentLocation}>
-                  Your city is {weatherDetails?.name}
+                Either You searched an Invalid city or it does not exist in
+                Database
+              </Text>
+
+              <TouchableOpacity
+                onPress={() => handleCurrentCity()}
+                style={{
+                  backgroundColor: theme.colors.backdrop,
+                  paddingHorizontal: wp(4),
+                  paddingVertical: hp(1.5),
+                  borderRadius: wp(2),
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    // width: wp(80),
+                    fontWeight: "700",
+                    fontSize: 16,
+                    color: theme.colors.background,
+                  }}
+                >
+                  Fetch Your current city
                 </Text>
-                <Icon name="arrow-right" size={24} />
               </TouchableOpacity>
+
+              <Text
+                style={{
+                  textAlign: "center",
+                  width: wp(80),
+                  fontWeight: "600",
+                  fontSize: 16,
+                }}
+              >
+                Or search the valid/other city
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                height: wp(100),
+                justifyContent: "center",
+                alignItems: "center",
+                // position: "absolute",
+                // top: hp(18),
+              }}
+            >
+              <View style={style.contentContainer}>
+                <TouchableOpacity
+                  onPress={() => router.push("/weather")}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: wp(4),
+                  }}
+                >
+                  <Text variant="titleMedium" style={style.currentLocation}>
+                    Your city is {weatherDetails?.name}
+                  </Text>
+                  <Icon name="arrow-right" size={24} />
+                </TouchableOpacity>
+                {weatherDetails && (
+                  <View style={{ flexDirection: "row", gap: wp(4) }}>
+                    <Card1 weatherDetails={weatherDetails} />
+                    <View style={{ top: hp(4), marginLeft: wp(2) }}>
+                      <Card2 weatherDetails={weatherDetails} />
+                    </View>
+                  </View>
+                )}
+              </View>
               {weatherDetails && (
-                <View style={{ flexDirection: "row", gap: wp(4) }}>
-                  <Card1 weatherDetails={weatherDetails} />
+                <View
+                  style={[
+                    style.contentContainer,
+                    { flexDirection: "row", alignItems: "center" },
+                  ]}
+                >
+                  <Card3 weatherDetails={weatherDetails} />
                   <View style={{ top: hp(4), marginLeft: wp(2) }}>
-                    <Card2 weatherDetails={weatherDetails} />
+                    <Card4 weatherDetails={weatherDetails} />
                   </View>
                 </View>
               )}
             </View>
-            {weatherDetails && (
-              <View
-                style={[
-                  style.contentContainer,
-                  { flexDirection: "row", alignItems: "center" },
-                ]}
-              >
-                <Card3 weatherDetails={weatherDetails} />
-                <View style={{ top: hp(4), marginLeft: wp(2) }}>
-                  <Card4 weatherDetails={weatherDetails} />
-                </View>
-              </View>
-            )}
-          </View>
-        )}
+          )}
+        </View>
+        {/* </LinearGradient> */}
       </LinearGradient>
     </SafeAreaView>
   );

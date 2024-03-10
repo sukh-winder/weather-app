@@ -6,13 +6,15 @@ Welcome to WeatherApp, a React Native application built with Expo that provides 
 
 - **Location-Based Weather:** Get accurate weather reports for your current location.
 - **City Search:** Explore weather conditions in any city by searching its name.
+- **Autocomplete City name:** Explore weather conditions in any city by searching its name but you don't have to put the whole name manually. - **!!commented for now**
 - **Simple Navigation:** Easily navigate between different pages for a seamless user experience.
+- **Error Handling:** The user gets the proper feedback if a city is not found to have fallbacks for a better experience.
 
 ## Prerequisites
 
 Before running the project, make sure you have the following:
 
-- [Expo CLI](https://docs.expo.dev/get-started/installation/) installed on your system. If not, install it using the following command:
+- [Expo CLI](https://docs.expo.dev/get-started/installation/) is installed on your system. If not, install it using the following command:
   ```bash
   npx create-expo-app --template
 

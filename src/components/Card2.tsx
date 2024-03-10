@@ -9,6 +9,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { BlurView } from "expo-blur";
 export default function Card2({
   weatherDetails,
 }: {
@@ -19,7 +20,7 @@ export default function Card2({
   const style = StyleSheet.create({
     card: {
       elevation: 4,
-      backgroundColor: theme.colors.scrim,
+      // backgroundColor: theme.colors.scrim,
       width: wp(40),
       borderRadius: wp(2),
       display: "flex",
@@ -27,6 +28,7 @@ export default function Card2({
       gap: wp(1),
       paddingHorizontal: wp(2),
       paddingVertical: hp(2),
+      shadowColor: "transparent",
     },
     tempContainer: {
       flexDirection: "row",
@@ -52,85 +54,90 @@ export default function Card2({
   });
   return (
     weatherDetails && (
-      <View style={style.card}>
-        <View style={{ gap: hp(0.5) }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "auto",
-              gap: wp(4),
-            }}
-          >
-            <View
-              style={{ alignItems: "flex-start", justifyContent: "flex-start" }}
-            >
-              <Text style={style.tempMax}>Max temp</Text>
-              <View style={style.tempContainer}>
-                <Text style={style.tempMax}>
-                  {fahrenheitToCelsius(weatherDetails?.main?.temp_max)}℃
-                </Text>
-                <Icon name="arrow-up" color={theme.colors.background} />
-              </View>
-            </View>
-
+      <BlurView style={{ borderRadius: wp(2), overflow: "hidden" }}>
+        <View style={style.card}>
+          <View style={{ gap: hp(0.5) }}>
             <View
               style={{
-                marginTop: hp(2),
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "auto",
+                gap: wp(4),
               }}
             >
-              <Text style={style.tempMin}>Min temp</Text>
+              <View
+                style={{
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <Text style={style.tempMax}>Max temp</Text>
+                <View style={style.tempContainer}>
+                  <Text style={style.tempMax}>
+                    {fahrenheitToCelsius(weatherDetails?.main?.temp_max)}℃
+                  </Text>
+                  <Icon name="arrow-up" color={theme.colors.background} />
+                </View>
+              </View>
 
               <View
-                style={[style.tempContainer, { justifyContent: "flex-end" }]}
+                style={{
+                  marginTop: hp(2),
+                }}
               >
-                <Text style={style.tempMin}>
-                  {fahrenheitToCelsius(weatherDetails?.main?.temp_min)}℃
-                </Text>
+                <Text style={style.tempMin}>Min temp</Text>
 
-                <Icon name="arrow-down" color={theme.colors.background} />
+                <View
+                  style={[style.tempContainer, { justifyContent: "flex-end" }]}
+                >
+                  <Text style={style.tempMin}>
+                    {fahrenheitToCelsius(weatherDetails?.main?.temp_min)}℃
+                  </Text>
+
+                  <Icon name="arrow-down" color={theme.colors.background} />
+                </View>
               </View>
             </View>
-          </View>
 
-          <View style={style.gustContainer}>
-            <Text
-              style={[
-                style.tempMax,
-                {
-                  fontSize: 16,
-                },
-              ]}
-            >
-              {weatherDetails?.wind?.gust ? "Gust:" : "Wind:"}
-            </Text>
-            <Text
-              style={[
-                style.tempMax,
-                {
-                  fontSize: 12,
-                },
-              ]}
-            >
-              {weatherDetails?.wind?.gust
-                ? mphToKmph(weatherDetails?.wind?.gust)
-                : weatherDetails?.wind.speed}
-              km/h
-            </Text>
+            <View style={style.gustContainer}>
+              <Text
+                style={[
+                  style.tempMax,
+                  {
+                    fontSize: 16,
+                  },
+                ]}
+              >
+                {weatherDetails?.wind?.gust ? "Gust:" : "Wind:"}
+              </Text>
+              <Text
+                style={[
+                  style.tempMax,
+                  {
+                    fontSize: 12,
+                  },
+                ]}
+              >
+                {weatherDetails?.wind?.gust
+                  ? mphToKmph(weatherDetails?.wind?.gust)
+                  : weatherDetails?.wind.speed}
+                km/h
+              </Text>
 
-            <Icon
-              name="weather-windy-variant"
-              color={theme.colors.background}
-              size={28}
-            />
+              <Icon
+                name="weather-windy-variant"
+                color={theme.colors.background}
+                size={28}
+              />
+            </View>
           </View>
-        </View>
-        {/* <Icon
+          {/* <Icon
         name={weatherIcon(weatherDetails?.weather[0]?.main)}
         color={theme.colors.background}
         size={34}
       /> */}
-      </View>
+        </View>
+      </BlurView>
     )
   );
 }

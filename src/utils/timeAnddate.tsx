@@ -5,8 +5,9 @@ export function convertUnixTimestampToAMPM(unixTimestamp: number): string {
   const seconds = "0" + date.getSeconds();
   const ampm = hours >= 12 ? "PM" : "AM";
   const formattedHours = hours % 12 || 12; // Convert from 24-hour to 12-hour format
+  const formattedMinutes = minutes.slice(-2); // Extract last two characters of minutes
 
-  return formattedHours + ":" + minutes.substr(-2) + " " + ampm;
+  return formattedHours + ":" + formattedMinutes + " " + ampm;
 }
 
 export function convertUnixTimestampToDate(unixTimestamp: number): string {

@@ -1,5 +1,5 @@
-export function fahrenheitToCelsius(temp: number): string {
-  const celsius = (temp - 276).toFixed(2);
+export function fahrenheitToCelsius(temp: number): number {
+  const celsius = Math.ceil(temp - 276);
 
   return celsius;
 }

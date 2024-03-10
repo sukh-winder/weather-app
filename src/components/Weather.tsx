@@ -17,11 +17,13 @@ import {
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Text } from "react-native-paper";
 import { useWeather } from "../store/weatherStore";
-import { weatherIcon } from "../utils/icon";
+import { getBackgroundAnimation, weatherIcon } from "../utils/icon";
 import { fahrenheitToCelsius } from "../utils/conversions";
 import { convertUnixTimestampToAMPM } from "../utils/timeAnddate";
 import { LinearGradient } from "expo-linear-gradient";
 import { getWeatherByCity } from "../utils/api";
+import LottieView from "lottie-react-native";
+import sunny from "../../assets/sunny.json";
 
 export default function Weather() {
   const theme = useTheme();
@@ -133,10 +135,24 @@ export default function Weather() {
           Hi! User.
         </Text>
         <View style={{ alignItems: "center" }}>
-          <Icon
+          {/* <Icon
             name={weatherIcon(weather?.weather[0]?.main)}
             color={theme.colors.background}
             size={hp(30)}
+          /> */}
+          <LottieView
+            source={
+              weather?.weather[0]?.main
+                ? getBackgroundAnimation(weather)
+                : sunny
+            }
+            autoPlay
+            loop
+            speed={5}
+            style={{
+              width: wp(100),
+              height: hp(30),
+            }}
           />
           <Text
             variant="displayLarge"
