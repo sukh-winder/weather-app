@@ -33,6 +33,7 @@ import { alert } from "../utils/Toast";
 import LottieView from "lottie-react-native";
 import { getBackgroundAnimation } from "../utils/icon";
 import sunny from "../../assets/sunny.json";
+import notFound from "../../assets/not-found.json";
 // import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const initialState = {
@@ -163,22 +164,37 @@ export default function SearchBar() {
           paddingHorizontal: wp(2),
         }}
       >
-        <LottieView
-          source={
-            weatherDetails?.weather[0]?.main
-              ? getBackgroundAnimation(weatherDetails)
-              : sunny
-          }
-          autoPlay
-          loop
-          style={{
-            width: wp(100),
-            height: hp(100),
-            position: "absolute",
-            zIndex: 1,
-            top: hp(28),
-          }}
-        />
+        {!weatherDetails?.name ? (
+          <LottieView
+            source={notFound}
+            autoPlay
+            loop
+            style={{
+              width: wp(100),
+              height: hp(100),
+              position: "absolute",
+              zIndex: 1,
+              top: hp(28),
+            }}
+          />
+        ) : (
+          <LottieView
+            source={
+              weatherDetails?.weather[0]?.main
+                ? getBackgroundAnimation(weatherDetails)
+                : sunny
+            }
+            autoPlay
+            loop
+            style={{
+              width: wp(100),
+              height: hp(100),
+              position: "absolute",
+              zIndex: 1,
+              top: hp(28),
+            }}
+          />
+        )}
         <View
           style={{
             width: wp(100),
