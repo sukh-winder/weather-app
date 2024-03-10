@@ -117,11 +117,6 @@ export default function SearchBar() {
     getLocation(Location, setWeatherDetails, setWeather);
   }, [Location]);
 
-  console.log(
-    "weatherDetails?.weather[0]?.main",
-    weatherDetails?.weather[0]?.main
-  );
-
   const style = StyleSheet.create({
     safeAreaView: {
       // flex: 1,

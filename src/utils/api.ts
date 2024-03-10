@@ -1,6 +1,5 @@
 import { Alert } from "react-native";
 import { alert } from "./Toast";
-
 const API_URL = "https://api.openweathermap.org/data/2.5/weather?";
 const API_KEY = "46a9246bebba16d42b36aac3fc3ba8af";
 

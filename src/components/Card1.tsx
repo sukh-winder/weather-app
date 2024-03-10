@@ -96,8 +96,8 @@ export default function Card1({
                 ? theme.colors.onBackground
                 : theme.colors.background
             }
-            style={{ alignSelf: "flex-end" }}
-            size={60}
+            // style={{ alignSelf: "flex-end" }}
+            size={40}
           />
           {/* icon provided by the api */}
           {/* <Image
