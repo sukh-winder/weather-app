@@ -31,3 +31,30 @@ export function getCurrentUnixTimestamp(): number {
 
   return unixTimestamp;
 }
+
+export const getCurrentTime = (
+  setCurrentTime: React.Dispatch<React.SetStateAction<string>>,
+  setGreeting: React.Dispatch<React.SetStateAction<string>>
+) => {
+  const now = new Date();
+  const hours = now.getHours();
+
+  let greetingMessage = "";
+
+  if (hours >= 5 && hours < 12) {
+    greetingMessage = "Good Morning";
+  } else if (hours >= 12 && hours < 18) {
+    greetingMessage = "Good Afternoon";
+  } else {
+    greetingMessage = "Good Evening";
+  }
+
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+
+  const timeString = `${formattedHours}:${minutes}:${seconds} ${ampm}`;
+  setCurrentTime(timeString);
+  setGreeting(greetingMessage);
+};

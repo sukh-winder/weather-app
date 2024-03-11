@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { ReactNode, useCallback, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useState } from "react";
 
 import useTheme from "../hooks/useTheme";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,7 +19,11 @@ import { Text } from "react-native-paper";
 import { useWeather } from "../store/weatherStore";
 import { getBackgroundAnimation, weatherIcon } from "../utils/icon";
 import { fahrenheitToCelsius } from "../utils/conversions";
-import { convertUnixTimestampToAMPM } from "../utils/timeAnddate";
+import {
+  convertUnixTimestampToAMPM,
+  convertUnixTimestampToDate,
+  getCurrentTime,
+} from "../utils/timeAnddate";
 import { LinearGradient } from "expo-linear-gradient";
 import { getWeatherByCity } from "../utils/api";
 import LottieView from "lottie-react-native";
@@ -30,7 +34,8 @@ export default function Weather() {
   const weather = useWeather((state) => state.weather);
   const setWeather = useWeather((state) => state.setWeather);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-
+  const [currentTime, setCurrentTime] = useState<string>("");
+  const [greetings, setGreeting] = useState<string>("");
   const style = StyleSheet.create({
     safeAreaView: {
       // flex: 1,
@@ -108,6 +113,18 @@ export default function Weather() {
     }, 2000);
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(
+      () => getCurrentTime(setCurrentTime, setGreeting),
+
+      1000
+    ); // Update every second
+
+    return () => {
+      clearInterval(intervalId); // Cleanup on component unmount
+    };
+  }, []);
+
   return refreshing ? (
     <SafeAreaView style={style.safeAreaView}>
       <LinearGradient
@@ -127,12 +144,16 @@ export default function Weather() {
         end={{ x: 0, y: 1 }}
         style={style.gradientContainer}
       >
+        <Text variant="titleMedium" style={style.user}>
+          Hi! User,{greetings}.
+        </Text>
+
         <Text variant="titleLarge" style={style.cityName}>
           {weather?.name}.
         </Text>
 
         <Text variant="titleMedium" style={style.user}>
-          Hi! User.
+          {currentTime}
         </Text>
         <View style={{ alignItems: "center" }}>
           {/* <Icon
@@ -172,7 +193,7 @@ export default function Weather() {
               variant="displaySmall"
               style={{ color: theme.colors.background }}
             >
-              {convertUnixTimestampToAMPM(weather?.dt)}
+              {convertUnixTimestampToDate(weather?.dt)}
             </Text>
 
             <TouchableOpacity onPress={() => onRefresh()}>
